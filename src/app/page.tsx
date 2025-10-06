@@ -126,16 +126,16 @@ export default function Home() {
     {
       title: "Nabung.AI",
       description:
-        "A comprehensive React component library built with TypeScript, Storybook, and automated testing. Used across multiple product teams.",
+        "An AI Powered Business Intelligence platform for data-driven decision making.",
       tech: ["Next.js", "Golang", "Gin", "Groq", "Tailwind", "Shadcn"],
       image: "/nabungai.png",
       link: "https://nabungai.uk",
-      status: "Production",
+      status: "Live",
     },
     {
       title: "PitchIQ",
       description:
-        "Interactive data visualization platform processing 10M+ events daily with WebSocket connections and optimized rendering.",
+        "AI Powered Pitchdeck analyzer for startups to optimize their pitchdeck.",
       tech: [
         "Next.js",
         "OpenAI",
@@ -158,14 +158,12 @@ export default function Home() {
       status: "Development",
     },
     {
-      title: "Developer Portfolio Website",
-      description:
-        "Modern portfolio with GSAP animations, performance optimization, and accessibility-first design principles.",
-      tech: ["Next.js", "GSAP", "Tailwind", "TypeScript"],
-      image:
-        "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?q=80&w=1200&auto=format&fit=crop",
+      title: "Shortly",
+      description: "Web app that provide a service to shorten links.",
+      tech: ["React.js", "Supabase", "Tailwind", "React Router"],
+      image: "/shortlyproject.png",
       link: "https://johndoe.dev",
-      status: "Live",
+      status: "Development",
     },
   ];
 
