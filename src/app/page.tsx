@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
+import { useTheme } from "@/components/theme-provider";
 
 // Register GSAP plugins on the client
 if (typeof window !== "undefined") {
@@ -11,6 +12,7 @@ if (typeof window !== "undefined") {
 }
 
 export default function Home() {
+  const { theme, toggleTheme } = useTheme();
   const heroRef = useRef<HTMLDivElement | null>(null);
   const expRef = useRef<HTMLDivElement | null>(null);
   const portfolioRef = useRef<HTMLDivElement | null>(null);
@@ -35,26 +37,42 @@ export default function Home() {
         });
       }
 
-      // Generic section reveal
+      // Generic section reveal with improved settings
       const sections = [
         expRef.current,
         portfolioRef.current,
         skillsRef.current,
         contactRef.current,
       ].filter(Boolean) as Element[];
+
       sections.forEach((section) => {
-        gsap.from(section.querySelectorAll("[data-reveal]"), {
-          opacity: 0,
-          y: 18,
-          duration: 0.6,
-          ease: "power2.out",
-          stagger: 0.06,
-          scrollTrigger: {
-            trigger: section,
-            start: "top 75%",
-            once: true,
-          },
-        });
+        const elements = section.querySelectorAll("[data-reveal]");
+        if (elements.length > 0) {
+          gsap.fromTo(
+            elements,
+            {
+              opacity: 0,
+              y: 20,
+            },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.7,
+              ease: "power2.out",
+              stagger: {
+                amount: 0.4,
+                from: "start",
+              },
+              scrollTrigger: {
+                trigger: section,
+                start: "top 80%",
+                end: "bottom 20%",
+                once: true,
+                toggleActions: "play none none none",
+              },
+            }
+          );
+        }
       });
 
       // Experience timeline line progress
@@ -503,10 +521,13 @@ export default function Home() {
       ),
     },
     {
-      name: "Vercel",
+      name: "Express",
       icon: (
-        <svg className="size-8 mx-auto" viewBox="0 0 128 128">
-          <path d="M64.002 8.576 128 119.424H0Zm0 0"></path>
+        <svg
+          className={`size-8 mx-auto ${theme === "dark" ? "fill-white" : "fill-black"}`}
+          viewBox="0 0 128 128"
+        >
+          <path d="M126.67 98.44c-4.56 1.16-7.38.05-9.91-3.75-5.68-8.51-11.95-16.63-18-24.9-.78-1.07-1.59-2.12-2.6-3.45C89 76 81.85 85.2 75.14 94.77c-2.4 3.42-4.92 4.91-9.4 3.7l26.92-36.13L67.6 29.71c4.31-.84 7.29-.41 9.93 3.45 5.83 8.52 12.26 16.63 18.67 25.21 6.45-8.55 12.8-16.67 18.8-25.11 2.41-3.42 5-4.72 9.33-3.46-3.28 4.35-6.49 8.63-9.72 12.88-4.36 5.73-8.64 11.53-13.16 17.14-1.61 2-1.35 3.3.09 5.19C109.9 76 118.16 87.1 126.67 98.44zM1.33 61.74c.72-3.61 1.2-7.29 2.2-10.83 6-21.43 30.6-30.34 47.5-17.06C60.93 41.64 63.39 52.62 62.9 65H7.1c-.84 22.21 15.15 35.62 35.53 28.78 7.15-2.4 11.36-8 13.47-15 1.07-3.51 2.84-4.06 6.14-3.06-1.69 8.76-5.52 16.08-13.52 20.66-12 6.86-29.13 4.64-38.14-4.89C5.26 85.89 3 78.92 2 71.39c-.15-1.2-.46-2.38-.7-3.57q.03-3.04.03-6.08zm5.87-1.49h50.43c-.33-16.06-10.33-27.47-24-27.57-15-.12-25.78 11.02-26.43 27.57z"></path>
         </svg>
       ),
     },
@@ -604,7 +625,10 @@ export default function Home() {
     {
       name: "Github",
       icon: (
-        <svg className="size-8 mx-auto" viewBox="0 0 128 128">
+        <svg
+          className={`size-8 mx-auto ${theme === "dark" ? "text-white" : "text-black"}`}
+          viewBox="0 0 128 128"
+        >
           <g fill="#181616">
             <path
               fillRule="evenodd"
@@ -657,41 +681,88 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-dvh bg-background text-foreground">
+    <div className="min-h-dvh bg-gradient-to-br from-background via-background to-background/95">
       {/* Top nav */}
-      <header className="sticky top-0 z-30 backdrop-blur supports-backdrop-blur:bg-background/70 border-b border-border">
-        <nav className="mx-auto max-w-6xl px-6 py-3 flex items-center justify-between">
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b border-border/50 shadow-sm">
+        <nav className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
           <a
             href="#top"
-            className="font-semibold tracking-tight hover:opacity-80 transition-opacity"
+            className="text-xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
           >
             Djibyuda
           </a>
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <a
-              href="#experience"
-              className="hover:text-foreground transition-colors"
+          <div className="flex items-center gap-6">
+            <div className="hidden md:flex items-center gap-6 text-sm font-medium">
+              <a
+                href="#experience"
+                className="text-muted-foreground hover:text-foreground transition-all hover:scale-105"
+              >
+                Experience
+              </a>
+              <a
+                href="#portfolio"
+                className="text-muted-foreground hover:text-foreground transition-all hover:scale-105"
+              >
+                Portfolio
+              </a>
+              <a
+                href="#skills"
+                className="text-muted-foreground hover:text-foreground transition-all hover:scale-105"
+              >
+                Skills
+              </a>
+              <a
+                href="#contact"
+                className="text-muted-foreground hover:text-foreground transition-all hover:scale-105"
+              >
+                Contact
+              </a>
+            </div>
+            <button
+              onClick={toggleTheme}
+              className="relative p-2.5 rounded-full bg-secondary/80 hover:bg-secondary transition-all hover:scale-110 active:scale-95 border border-border/50 shadow-sm"
+              aria-label="Toggle theme"
             >
-              Experience
-            </a>
-            <a
-              href="#portfolio"
-              className="hover:text-foreground transition-colors"
-            >
-              Portfolio
-            </a>
-            <a
-              href="#skills"
-              className="hover:text-foreground transition-colors"
-            >
-              Skills
-            </a>
-            <a
-              href="#contact"
-              className="hover:text-foreground transition-colors"
-            >
-              Contact
-            </a>
+              {theme === "dark" ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-foreground"
+                >
+                  <circle cx="12" cy="12" r="4" />
+                  <path d="M12 2v2" />
+                  <path d="M12 20v2" />
+                  <path d="m4.93 4.93 1.41 1.41" />
+                  <path d="m17.66 17.66 1.41 1.41" />
+                  <path d="M2 12h2" />
+                  <path d="M20 12h2" />
+                  <path d="m6.34 17.66-1.41 1.41" />
+                  <path d="m19.07 4.93-1.41 1.41" />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-foreground"
+                >
+                  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                </svg>
+              )}
+            </button>
           </div>
         </nav>
       </header>
@@ -700,82 +771,112 @@ export default function Home() {
       <section
         id="top"
         ref={heroRef}
-        className="scroll-mt-24 relative mx-auto max-w-6xl px-6 pt-16 pb-10 md:pt-24 md:pb-16"
+        className="scroll-mt-24 relative mx-auto max-w-7xl px-6 pt-20 pb-16 md:pt-32 md:pb-24"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div>
             <div
               data-hero-child
-              className="text-xs uppercase tracking-widest text-muted-foreground mb-3"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs font-medium text-primary mb-6"
             >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+              </span>
               Available for work
             </div>
             <h1
               data-hero-child
-              className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight"
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight bg-gradient-to-br from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent leading-tight"
             >
-              Fullstack Developer with a passion for building scalable and
-              efficient web applications
+              Fullstack Developer
             </h1>
             <p
               data-hero-child
-              className="mt-4 text-muted-foreground max-w-prose"
+              className="mt-6 text-lg text-muted-foreground max-w-prose leading-relaxed"
             >
-              I build performant web applications with a focus on scalability
-              and efficiency. I am a quick learner and I am always looking for
-              new challenges.
+              Building scalable and efficient web applications with modern
+              technologies. Passionate about clean code, performance
+              optimization, and creating exceptional user experiences.
             </p>
             <div
               data-hero-child
-              className="mt-6 flex flex-wrap items-center gap-3"
+              className="mt-8 flex flex-wrap items-center gap-4"
             >
               <a
                 href="#contact"
-                className="px-4 py-2 rounded-md bg-foreground text-background hover:opacity-90 transition-opacity text-sm"
+                className="group relative px-6 py-3 rounded-xl bg-foreground text-background font-medium hover:scale-105 transition-all hover:shadow-lg hover:shadow-foreground/20 active:scale-95"
               >
                 Get in touch
+                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity" />
               </a>
               <a
                 href="/resume.pdf"
-                className="px-4 py-2 rounded-md border border-border hover:bg-secondary transition-colors text-sm"
+                className="px-6 py-3 rounded-xl border-2 border-border hover:border-foreground/50 hover:bg-secondary/50 transition-all font-medium hover:scale-105 active:scale-95"
               >
                 Download CV
               </a>
             </div>
-            <div
-              data-hero-child
-              className="mt-6 flex items-center gap-4 text-sm text-muted-foreground"
-            >
+            <div data-hero-child className="mt-8 flex items-center gap-6">
               <a
                 href="https://github.com"
                 target="_blank"
                 rel="noreferrer"
-                className="hover:text-foreground transition-colors"
+                className="group flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-all hover:scale-105"
               >
+                <svg
+                  className="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                </svg>
                 GitHub
               </a>
               <a
                 href="https://www.linkedin.com"
                 target="_blank"
                 rel="noreferrer"
-                className="hover:text-foreground transition-colors"
+                className="group flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-all hover:scale-105"
               >
+                <svg
+                  className="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                </svg>
                 LinkedIn
               </a>
               <a
                 href="mailto:hello@example.com"
-                className="hover:text-foreground transition-colors"
+                className="group flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-all hover:scale-105"
               >
+                <svg
+                  className="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <rect width="20" height="16" x="2" y="4" rx="2" />
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                </svg>
                 Email
               </a>
             </div>
           </div>
-          <div className="relative">
-            <div className="aspect-[4/3] w-full overflow-hidden rounded-xl border border-border">
+          <div className="relative" data-hero-child>
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 rounded-2xl blur-2xl" />
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border-2 border-border/50 shadow-2xl hover:shadow-3xl transition-shadow duration-500">
               <Image
                 src="/fotoyuda.JPG"
                 alt="Workspace"
-                className="h-full w-full rounded-xl object-cover will-change-transform"
+                className="h-full w-full object-cover hover:scale-105 transition-transform duration-700"
                 fill
               />
             </div>
@@ -787,48 +888,59 @@ export default function Home() {
       <section
         id="experience"
         ref={expRef}
-        className="scroll-mt-24 mx-auto max-w-6xl px-6 py-12 md:py-20"
+        className="scroll-mt-24 mx-auto max-w-7xl px-6 py-16 md:py-24"
       >
-        <div className="mb-8 md:mb-12">
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
+        <div className="mb-12 md:mb-16" data-reveal>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
             Experience
           </h2>
-          <p className="text-muted-foreground mt-2 max-w-prose">
-            A concise timeline of roles with impact and outcomes.
+          <p className="text-muted-foreground mt-3 text-lg max-w-2xl">
+            A timeline of roles, impact, and continuous learning.
           </p>
         </div>
-        <div className="relative grid grid-cols-[20px_1fr] md:grid-cols-[28px_1fr] gap-x-6">
+        <div className="relative grid grid-cols-[24px_1fr] md:grid-cols-[32px_1fr] gap-x-8">
           {/* Vertical line */}
           <div className="relative">
-            <div className="absolute left-[9px] md:left-[12px] top-0 bottom-0 w-[2px] bg-border rounded" />
+            <div className="absolute left-[11px] md:left-[15px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-border via-border to-transparent rounded-full" />
             <div
               data-timeline-line
-              className="absolute left-[9px] md:left-[12px] top-0 bottom-0 w-[2px] bg-foreground/70 rounded origin-top"
+              className="absolute left-[11px] md:left-[15px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-primary via-primary/70 to-transparent rounded-full origin-top"
             />
           </div>
 
-          <ol className="space-y-10">
+          <ol className="space-y-12">
             {experience.map((item, idx) => (
               <li key={idx} className="relative" data-reveal>
-                <div className="group grid sm:grid-cols-[1fr_auto] gap-2 sm:gap-6">
-                  <div>
-                    <h3 className="text-lg md:text-xl font-medium">
-                      {item.role}{" "}
-                      <span className="text-muted-foreground">
-                        · {item.company}
+                <div className="absolute -left-[34px] md:-left-[42px] top-2 w-3 h-3 md:w-4 md:h-4 rounded-full bg-primary border-4 border-background shadow-lg shadow-primary/20" />
+                <div className="group p-6 rounded-2xl border-2 border-border/50 hover:border-primary/30 bg-card/50 backdrop-blur-sm hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1">
+                  <div className="grid sm:grid-cols-[1fr_auto] gap-3 sm:gap-6">
+                    <div>
+                      <h3 className="text-xl md:text-2xl font-bold group-hover:text-primary transition-colors">
+                        {item.role}
+                      </h3>
+                      <p className="text-base font-medium text-muted-foreground mt-1">
+                        {item.company}
+                      </p>
+                      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                        {item.summary}
+                      </p>
+                      <ul className="mt-4 space-y-2">
+                        {item.bullets.map((b, i) => (
+                          <li
+                            key={i}
+                            className="flex items-start gap-3 text-sm text-muted-foreground"
+                          >
+                            <span className="mt-1.5 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-primary/70" />
+                            <span>{b}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="flex items-start">
+                      <span className="inline-flex px-3 py-1.5 text-xs font-semibold rounded-full bg-primary/10 text-primary border border-primary/20 whitespace-nowrap">
+                        {item.period}
                       </span>
-                    </h3>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {item.summary}
-                    </p>
-                    <ul className="mt-3 list-disc pl-5 text-sm text-muted-foreground space-y-1">
-                      {item.bullets.map((b, i) => (
-                        <li key={i}>{b}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="text-xs whitespace-nowrap text-muted-foreground sm:text-right mt-1 sm:mt-0">
-                    {item.period}
+                    </div>
                   </div>
                 </div>
               </li>
@@ -841,49 +953,58 @@ export default function Home() {
       <section
         id="portfolio"
         ref={portfolioRef}
-        className="scroll-mt-24 mx-auto max-w-6xl px-6 py-12 md:py-20"
+        className="scroll-mt-24 mx-auto max-w-7xl px-6 py-16 md:py-24"
       >
-        <div className="mb-8 md:mb-12">
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
+        <div className="mb-12 md:mb-16" data-reveal>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
             Portfolio
           </h2>
-          <p className="text-muted-foreground mt-2 max-w-prose">
+          <p className="text-muted-foreground mt-3 text-lg max-w-2xl">
             Selected projects showcasing technical expertise and design
-            sensibility.
+            excellence.
           </p>
         </div>
         <div className="grid sm:grid-cols-2 gap-6 md:gap-8">
           {projects.map((project, idx) => (
             <div
               key={idx}
-              className="group rounded-xl border border-border overflow-hidden hover:bg-card/50 transition-colors"
+              className="group relative rounded-2xl border-2 border-border/50 overflow-hidden bg-card/30 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10"
               data-reveal
             >
-              <div className="aspect-video overflow-hidden">
+              <div className="aspect-video overflow-hidden relative bg-muted">
                 <Image
                   src={project.image}
                   alt={project.title}
                   loading="lazy"
                   width={800}
                   height={800}
-                  className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
               <div className="p-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <h3 className="font-semibold text-lg">{project.title}</h3>
-                  <span className="px-2 py-1 text-xs rounded-full bg-secondary text-secondary-foreground">
+                <div className="flex items-center gap-3 mb-3">
+                  <h3 className="font-bold text-xl group-hover:text-primary transition-colors">
+                    {project.title}
+                  </h3>
+                  <span
+                    className={`px-2.5 py-1 text-xs font-semibold rounded-full ${
+                      project.status === "Live"
+                        ? "bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20"
+                        : "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20"
+                    }`}
+                  >
                     {project.status}
                   </span>
                 </div>
-                <p className="text-muted-foreground text-sm mb-4">
+                <p className="text-muted-foreground text-sm leading-relaxed mb-4">
                   {project.description}
                 </p>
-                <div className="flex flex-wrap gap-2 mb-4">
+                <div className="flex flex-wrap gap-2 mb-5">
                   {project.tech.map((tech) => (
                     <span
                       key={tech}
-                      className="px-2 py-1 text-xs rounded bg-muted text-muted-foreground"
+                      className="px-2.5 py-1 text-xs font-medium rounded-lg bg-secondary/60 text-foreground/80 border border-border/30 hover:border-primary/30 transition-colors"
                     >
                       {tech}
                     </span>
@@ -893,9 +1014,22 @@ export default function Home() {
                   href={project.link}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center text-sm text-foreground hover:opacity-80 transition-opacity"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:gap-3 transition-all group/link"
                 >
-                  View Project →
+                  View Project
+                  <svg
+                    className="w-4 h-4 group-hover/link:translate-x-1 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
                 </a>
               </div>
             </div>
@@ -907,25 +1041,29 @@ export default function Home() {
       <section
         id="skills"
         ref={skillsRef}
-        className="scroll-mt-24 mx-auto max-w-6xl px-6 py-12 md:py-20"
+        className="scroll-mt-24 mx-auto max-w-7xl px-6 py-16 md:py-24"
       >
-        <div className="mb-8 md:mb-12">
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
+        <div className="mb-12 md:mb-16" data-reveal>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
             Technologies
           </h2>
-          <p className="text-muted-foreground mt-2 max-w-prose">
-            Tools and technologies I work with regularly.
+          <p className="text-muted-foreground mt-3 text-lg max-w-2xl">
+            Modern tools and technologies I work with regularly.
           </p>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
           {technologies.map((tech) => (
             <div
               key={tech.name}
-              className="group p-4 rounded-lg border border-border hover:bg-secondary/60 transition-colors text-center"
+              className="group relative p-6 rounded-2xl border-2 border-border/50 bg-card/30 backdrop-blur-sm hover:border-primary/30 hover:bg-card/50 transition-all duration-300 text-center hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/10"
               data-reveal
             >
-              <div className="mb-2 text-center">{tech.icon}</div>
-              <span className="text-sm font-medium">{tech.name}</span>
+              <div className="mb-3 text-center transform group-hover:scale-110 transition-transform duration-300">
+                {tech.icon}
+              </div>
+              <span className="text-sm font-semibold text-foreground/80 group-hover:text-primary transition-colors">
+                {tech.name}
+              </span>
             </div>
           ))}
         </div>
@@ -935,33 +1073,37 @@ export default function Home() {
       <section
         id="contact"
         ref={contactRef}
-        className="scroll-mt-24 mx-auto max-w-6xl px-6 pb-16 md:pb-24"
+        className="scroll-mt-24 mx-auto max-w-7xl px-6 pb-20 md:pb-32"
       >
         <div
-          className="rounded-xl border border-border p-6 md:p-8 bg-card/50"
+          className="relative rounded-3xl border-2 border-border/50 p-8 md:p-12 bg-gradient-to-br from-card/50 via-card/30 to-card/50 backdrop-blur-sm overflow-hidden"
           data-reveal
         >
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
-            Contact
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -z-10" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -z-10" />
+
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+            Let&apos;s Work Together
           </h2>
-          <p className="text-muted-foreground mt-2 max-w-prose">
+          <p className="text-muted-foreground mt-4 text-lg max-w-3xl leading-relaxed">
             I&apos;m open to roles where I can raise the bar on frontend craft
             or fullstack development. If you have an opportunity that values
             design systems, accessibility, performance, and product thinking,
             let&apos;s talk.
           </p>
-          <div className="mt-6 flex flex-wrap items-center gap-3">
+          <div className="mt-8 flex flex-wrap items-center gap-4">
             <a
               href="mailto:djibyuda@gmail.com"
-              className="px-4 py-2 rounded-md bg-foreground text-background hover:opacity-90 transition-opacity text-sm"
+              className="group relative px-6 py-3 rounded-xl bg-foreground text-background font-semibold hover:scale-105 transition-all hover:shadow-lg hover:shadow-foreground/20 active:scale-95"
             >
               djibyuda@gmail.com
+              <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             </a>
             <a
               href="https://cal.com"
               target="_blank"
               rel="noreferrer"
-              className="px-4 py-2 rounded-md border border-border hover:bg-secondary transition-colors text-sm"
+              className="px-6 py-3 rounded-xl border-2 border-border hover:border-primary/30 hover:bg-secondary/50 transition-all font-semibold hover:scale-105 active:scale-95"
             >
               Schedule a chat
             </a>
@@ -970,6 +1112,39 @@ export default function Home() {
       </section>
 
       {/* Footer */}
+      <footer className="border-t border-border/50 bg-card/30 backdrop-blur-sm">
+        <div className="mx-auto max-w-7xl px-6 py-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-sm text-muted-foreground">
+              © {new Date().getFullYear()} Djibyuda. All rights reserved.
+            </p>
+            <div className="flex items-center gap-6">
+              <a
+                href="https://github.com"
+                target="_blank"
+                rel="noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                GitHub
+              </a>
+              <a
+                href="https://www.linkedin.com"
+                target="_blank"
+                rel="noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                LinkedIn
+              </a>
+              <a
+                href="mailto:djibyuda@gmail.com"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Email
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
