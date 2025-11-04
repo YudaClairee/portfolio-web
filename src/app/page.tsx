@@ -180,8 +180,8 @@ export default function Home() {
       description: "Web app that provide a service to shorten links.",
       tech: ["React.js", "Supabase", "Tailwind", "React Router"],
       image: "/shortlyproject.png",
-      link: "https://johndoe.dev",
-      status: "Development",
+      link: "https://shortlyid.netlify.app",
+      status: "Live",
     },
   ];
 
@@ -800,7 +800,7 @@ export default function Home() {
               className="mt-6 text-lg text-muted-foreground max-w-prose leading-relaxed"
             >
               Building scalable and efficient web applications with modern
-              technologies. Passionate about clean code, performance
+              technologies. Passionate about good design, performance
               optimization, and creating exceptional user experiences.
             </p>
             <div
