@@ -4,7 +4,10 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
+import Link from "next/link";
 import { useTheme } from "@/components/theme-provider";
+import { projects } from "@/data/projects";
+import { ProjectCard } from "@/components/project-card";
 
 // Register GSAP plugins on the client
 if (typeof window !== "undefined") {
@@ -141,50 +144,7 @@ export default function Home() {
     },
   ];
 
-  const projects = [
-    {
-      title: "Nabung.AI",
-      description:
-        "An AI Powered Business Intelligence platform for data-driven decision making.",
-      tech: ["Next.js", "Golang", "Gin", "Groq", "Tailwind", "Shadcn"],
-      image: "/nabungai.png",
-      link: "https://nabungai.uk",
-      status: "Live",
-    },
-    {
-      title: "PitchIQ",
-      description:
-        "AI Powered Pitchdeck analyzer for startups to optimize their pitchdeck.",
-      tech: [
-        "Next.js",
-        "OpenAI",
-        "trigger.dev",
-        "R2 Cloudflare",
-        "Tailwind",
-        "Shadcn",
-      ],
-      image: "/pitchiq.png",
-      link: "https://pitchiq-rosy.vercel.app/",
-      status: "Live",
-    },
-    {
-      title: "WallyAI",
-      description:
-        "AI Powered expense tracker with AI assistant to help you manage your expenses and save money.",
-      tech: ["Next.js", "Tailwind", "Shadcn", "Postgres", "OpenRouter"],
-      image: "/wallyai.png",
-      link: "https://wallyai-app.netlify.app",
-      status: "Live",
-    },
-    {
-      title: "Shortly",
-      description: "Web app that provide a service to shorten links.",
-      tech: ["React.js", "Supabase", "Tailwind", "React Router"],
-      image: "/shortlyproject.png",
-      link: "https://shortlyid.netlify.app",
-      status: "Live",
-    },
-  ];
+
 
   const technologies = [
     {
@@ -594,7 +554,7 @@ export default function Home() {
                 <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity" />
               </a>
               <a
-                href="/resume.pdf"
+                href="/cvyuda.pdf"
                 className="px-6 py-3 rounded-xl border-2 border-border hover:border-foreground/50 hover:bg-secondary/50 transition-all font-medium hover:scale-105 active:scale-95"
               >
                 Download CV
@@ -602,7 +562,7 @@ export default function Home() {
             </div>
             <div data-hero-child className="mt-8 flex items-center gap-6">
               <a
-                href="https://github.com"
+                href="https://github.com/YudaClairee"
                 target="_blank"
                 rel="noreferrer"
                 className="group flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-all hover:scale-105"
@@ -617,7 +577,7 @@ export default function Home() {
                 GitHub
               </a>
               <a
-                href="https://www.linkedin.com"
+                href="https://www.linkedin.com/in/djibraniyuda"
                 target="_blank"
                 rel="noreferrer"
                 className="group flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-all hover:scale-105"
@@ -632,7 +592,7 @@ export default function Home() {
                 LinkedIn
               </a>
               <a
-                href="mailto:hello@example.com"
+                href="mailto:djibyuda@gmail.com"
                 className="group flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-all hover:scale-105"
               >
                 <svg
@@ -744,75 +704,28 @@ export default function Home() {
           </p>
         </div>
         <div className="grid sm:grid-cols-2 gap-6 md:gap-8">
-          {projects.map((project, idx) => (
-            <div
-              key={idx}
-              className="group relative rounded-2xl border-2 border-border/50 overflow-hidden bg-card/30 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10"
-              data-reveal
-            >
-              <div className="aspect-video overflow-hidden relative bg-muted">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  loading="lazy"
-                  width={800}
-                  height={800}
-                  className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
-              <div className="p-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <h3 className="font-bold text-xl group-hover:text-primary transition-colors">
-                    {project.title}
-                  </h3>
-                  <span
-                    className={`px-2.5 py-1 text-xs font-semibold rounded-full ${
-                      project.status === "Live"
-                        ? "bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20"
-                        : "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20"
-                    }`}
-                  >
-                    {project.status}
-                  </span>
-                </div>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-4">
-                  {project.description}
-                </p>
-                <div className="flex flex-wrap gap-2 mb-5">
-                  {project.tech.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-2.5 py-1 text-xs font-medium rounded-lg bg-secondary/60 text-foreground/80 border border-border/30 hover:border-primary/30 transition-colors"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:gap-3 transition-all group/link"
-                >
-                  View Project
-                  <svg
-                    className="w-4 h-4 group-hover/link:translate-x-1 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-                </a>
-              </div>
-            </div>
+          {projects.slice(0, 4).map((project, idx) => (
+            <ProjectCard key={idx} project={project} />
           ))}
+        </div>
+        
+        <div className="mt-12 text-center" data-reveal>
+          <Link
+             href="/projects"
+             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-foreground text-background font-medium hover:scale-105 transition-all hover:shadow-lg hover:shadow-foreground/20 active:scale-95"
+           >
+             View All Projects
+             <svg
+               className="w-4 h-4"
+               viewBox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               strokeWidth="2"
+             >
+               <path d="M5 12h14" />
+               <path d="m12 5 7 7-7 7" />
+             </svg>
+           </Link>
         </div>
       </section>
 
