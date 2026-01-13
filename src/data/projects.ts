@@ -66,4 +66,12 @@ export const projects: Project[] = [
     link: "https://latihai.netlify.app",
     status: "Development",
   },
+  {
+    title: "Belajar-kids",
+    description: "AI-powered web app for smart study planner.",
+    tech: ["Next.js", "OpenRouter", "Prisma", "Tailwind", "PostgreSQL"],
+    image: "/latihai.png",
+    link: "https://belajarkids.netlify.app",
+    status: "Live",
+  },
 ];
