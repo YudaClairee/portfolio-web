@@ -70,7 +70,7 @@ export const projects: Project[] = [
     title: "Belajar-kids",
     description: "AI-powered web app for smart study planner.",
     tech: ["Next.js", "OpenRouter", "Prisma", "Tailwind", "PostgreSQL"],
-    image: "/latihai.png",
+    image: "/belajarkids.png",
     link: "https://belajarkids.netlify.app",
     status: "Live",
   },
